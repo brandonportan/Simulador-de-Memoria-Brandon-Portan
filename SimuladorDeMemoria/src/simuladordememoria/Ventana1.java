@@ -9,9 +9,92 @@ package simuladordememoria;
  *
  * @author LENOVO
  */
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
 public class Ventana1 extends javax.swing.JFrame {
+
     DefaultTableModel modelo;
+    DefaultTableCellRenderer alinear;
+    int memTotal;
+    int particiones;
+
+    /*
+    private void validarTextFieldEntero(javax.swing.JTextField field, int variableGlobal, javax.swing.JLabel etiqueta){
+        try{
+            if(field.getText().trim().length()==0){
+                variableGlobal =0;
+                etiqueta.setText("");
+            }
+            else{
+                variableGlobal = Integer.parseInt(field.getText());
+            }
+        }catch(Exception e){
+            etiqueta.setText("Utilizar numeros enteros");
+        }
+    }*/
+    private void validarMemoria() throws NumberFormatException, Exception {
+        try {
+            if (totalMem.getText().length() == 0) {
+                memTotal = 0;
+                exceptionMemoria.setText("");
+            } else {
+                memTotal = Integer.parseInt(totalMem.getText());
+            }
+
+            if (memTotal < 20 && totalMem.getText().length() != 0) {
+                throw new Exception("Elija un tamaño mas grande de memoria");
+            }
+
+           
+
+        } catch (NumberFormatException e) {
+            exceptionMemoria.setText("Los numeros deben ser enteros");
+            throw e;
+        } catch (Exception ez) {
+            exceptionMemoria.setText(ez.getMessage());
+            throw ez;
+        }
+    }
+    private void llenarTablaParticiones(int numero){
+        modelo.setRowCount(numero);
+            for (int i = 0; i < numero; i++) {
+                modelo.setValueAt(i + 1, i, 0);
+            }
+    }
+    private void validarMemoriaParticion()throws NumberFormatException, Exception{
+
+        if (memTotal / particiones < 5 && nPart.getText().trim().length() != 0) {/*Establecemos que el minimo de tamaño por particion debe ser 5**/
+            partException.setText("Elija un menor numero de particiones");
+            throw new Exception("Elija un menor numero de particiones");
+        }
+    }
+
+    private void validarParticiones() throws NumberFormatException, Exception {
+      ///  try {
+            particiones = Integer.parseInt(nPart.getText());
+            if (nPart.getText().trim().length() == 0) {
+                partException.setText("");
+                throw new Exception("Debe llenar el cuadro");
+            } else {
+                if (totalMem.getText().trim().length() == 0) {
+                    throw new Exception("Debe establecer un tamaño de memoria");
+                } 
+            }
+            if(particiones<=1){
+                partException.setText("Debe haber mas de 1 particion");
+                throw new Exception("Debe haber mas de 1 particion");
+            }
+
+            
+            
+     //   } 
+    }
+
     /**
      * Creates new form Ventana1
      */
@@ -28,13 +111,23 @@ public class Ventana1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        algoritmo = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        txt1 = new javax.swing.JTextField();
+        totalMem = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        nPart = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        t1 = new javax.swing.JTable();
+        tablaParticion = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
+        partException = new javax.swing.JLabel();
+        primerAjuste = new javax.swing.JRadioButton();
+        mejorAjuste = new javax.swing.JRadioButton();
+        jLabel4 = new javax.swing.JLabel();
+        tmin = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        tmax = new javax.swing.JTextField();
+        btnSig = new javax.swing.JButton();
+        exceptionMemoria = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Brandon Portan - Simulador de Memoria");
@@ -47,11 +140,22 @@ public class Ventana1 extends javax.swing.JFrame {
 
         jLabel1.setText("Total Memoria:");
 
-        txt1.setName("txt1"); // NOI18N
+        totalMem.setName("totalMem"); // NOI18N
+        totalMem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                totalMemKeyReleased(evt);
+            }
+        });
 
         jLabel2.setText("Cantidad de Particiones");
 
-        t1.setModel(new javax.swing.table.DefaultTableModel(
+        nPart.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nPartKeyReleased(evt);
+            }
+        });
+
+        tablaParticion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -62,9 +166,30 @@ public class Ventana1 extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(t1);
+        jScrollPane1.setViewportView(tablaParticion);
 
         jLabel3.setText("Tamaño de Particion:");
+
+        partException.setForeground(new java.awt.Color(255, 0, 0));
+
+        algoritmo.add(primerAjuste);
+        primerAjuste.setText("Primer Ajuste");
+
+        algoritmo.add(mejorAjuste);
+        mejorAjuste.setText("Mejor Ajuste");
+
+        jLabel4.setText("Tiempo Minimo por Proceso");
+
+        jLabel6.setText("Tiempo Maximo por Proceso");
+
+        btnSig.setText("Siguiente");
+        btnSig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSigActionPerformed(evt);
+            }
+        });
+
+        exceptionMemoria.setForeground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,17 +199,38 @@ public class Ventana1 extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2))
-                            .addGap(91, 91, 91)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txt1, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                                .addComponent(jTextField1)))))
-                .addContainerGap(201, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(primerAjuste)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(mejorAjuste))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(91, 91, 91)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(totalMem, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                                    .addComponent(nPart)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tmin, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                                    .addComponent(tmax))))
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(exceptionMemoria)
+                            .addComponent(partException))))
+                .addContainerGap(244, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSig)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,16 +238,32 @@ public class Ventana1 extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(totalMem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(exceptionMemoria))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1))
+                    .addComponent(nPart)
+                    .addComponent(partException))
                 .addGap(38, 38, 38)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(168, 168, 168))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(primerAjuste)
+                    .addComponent(mejorAjuste))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(tmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(tmax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1, 1, 1)
+                .addComponent(btnSig)
+                .addContainerGap())
         );
 
         pack();
@@ -109,13 +271,77 @@ public class Ventana1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        modelo = new DefaultTableModel();
-        
+        modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if (column != 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+        alinear = new DefaultTableCellRenderer();
+        alinear.setHorizontalAlignment(SwingConstants.CENTER);
+
         modelo.addColumn("Particion");
         modelo.addColumn("Tamaño");
-        
-        t1.setModel(modelo);
+
+        tablaParticion.setModel(modelo);
+        tablaParticion.getColumnModel().getColumn(0).setCellRenderer(alinear);
+
+
     }//GEN-LAST:event_formWindowOpened
+
+    private void nPartKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nPartKeyReleased
+        try {
+            // TODO add your handling code here:
+            validarParticiones();
+            validarMemoriaParticion();
+            llenarTablaParticiones(particiones);
+            partException.setText("");
+        } catch (NumberFormatException e) {
+            if (nPart.getText().trim().length() != 0) {
+                partException.setText("Utilizar numeros enteros");
+            } else {
+                partException.setText("");
+            }
+
+        } catch (Exception ex) {
+            partException.setText(ex.getMessage());
+        }
+    }//GEN-LAST:event_nPartKeyReleased
+
+    private void btnSigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSigActionPerformed
+        // TODO add your handling code here:
+        try {
+            validarMemoria();
+            validarParticiones();
+            validarMemoriaParticion();
+            Ventana2 v2 = new Ventana2(Integer.parseInt(totalMem.getText()), ERROR, ERROR, ABORT);
+            v2.setVisible(true);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Revise los errores en el formulario", "Error", NORMAL);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Revise los errores en el formulario", "Error", NORMAL);
+        }
+    }//GEN-LAST:event_btnSigActionPerformed
+
+    private void totalMemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_totalMemKeyReleased
+        try {
+            // TODO add your handling code here:
+            validarMemoria();
+            exceptionMemoria.setText("");
+            if (nPart.getText().trim().length() != 0) {
+                validarParticiones(); 
+                validarMemoriaParticion();
+                
+            }
+            exceptionMemoria.setText("");
+        } catch (Exception ex) {
+            //Logger.getLogger(Ventana1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_totalMemKeyReleased
 
     /**
      * @param args the command line arguments
@@ -149,17 +375,27 @@ public class Ventana1 extends javax.swing.JFrame {
             public void run() {
                 new Ventana1().setVisible(true);
             }
-            
+
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup algoritmo;
+    private javax.swing.JButton btnSig;
+    private javax.swing.JLabel exceptionMemoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable t1;
-    private javax.swing.JTextField txt1;
+    private javax.swing.JRadioButton mejorAjuste;
+    private javax.swing.JTextField nPart;
+    private javax.swing.JLabel partException;
+    private javax.swing.JRadioButton primerAjuste;
+    private javax.swing.JTable tablaParticion;
+    private javax.swing.JTextField tmax;
+    private javax.swing.JTextField tmin;
+    private javax.swing.JTextField totalMem;
     // End of variables declaration//GEN-END:variables
 }
