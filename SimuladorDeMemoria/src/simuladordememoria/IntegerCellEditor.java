@@ -11,6 +11,7 @@ package simuladordememoria;
  */
 import java.awt.Color;
 import java.awt.Component;
+import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -79,6 +80,7 @@ public class IntegerCellEditor extends DefaultCellEditor {
             }*/
 
         } catch (NumberFormatException e) {
+            this.errorLabel.setForeground(Color.red);
             this.errorLabel.setText("El valor debe ser un número entero ");
             return -1002;
         } catch (Exception ex) {
@@ -148,17 +150,31 @@ public class IntegerCellEditor extends DefaultCellEditor {
    public boolean validarSumaTotal(){
        if(this.suma < this.totalMemoria){
            this.errorLabel.setForeground(Color.red);
-           this.errorLabel.setText("No se ha cubierto el total de memoria");
+           this.errorLabel.setText("No se ha cubierto el total de memoria: Suma = " + this.suma);
            return false;
        }
        if(this.suma > this.totalMemoria){
            this.errorLabel.setForeground(Color.red);
-           this.errorLabel.setText("La suma sobrepasa el tamaño de memoria");
+           this.errorLabel.setText("La suma sobrepasa el tamaño de memoria: Suma = " + this.suma);
            return false;
        }
        return true;
        
        
+   }
+   
+   public LinkedList<Particion> obtenerLista(){
+       LinkedList lista;
+        lista = new LinkedList();
+        
+        for(int i=0; i< this.model.getRowCount(); i++){
+            int valorCelda =Integer.parseInt( model.getValueAt(i, 1).toString());
+            Particion p = new Particion(valorCelda);
+            lista.add(p);
+            
+        }
+        System.out.println("Lista: "+ lista);
+        return lista;
    }
   
     

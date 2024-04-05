@@ -5,15 +5,30 @@
  */
 package simuladordememoria;
 
+import java.awt.Dimension;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Vector;
+import javax.swing.Box;
+import javax.swing.Timer;
+
 /**
  *
  * @author LENOVO
  */
 public class Ventana2 extends javax.swing.JFrame {
+
     public int memTotal;
     public int tiempoMin;
     public int tiempoMax;
     public int ajuste;
+    public LinkedList<Particion> particiones;
+    public int particionMayor;
+    public LinkedList<Proceso> listaProcesos;
+    public LinkedList<Proceso> procesosEjecutando;
+    public boolean simIniciada;
+
+    ModeloV2 model;
 
     /**
      * Creates new form Ventana2
@@ -21,12 +36,76 @@ public class Ventana2 extends javax.swing.JFrame {
     public Ventana2() {
         initComponents();
     }
-    public Ventana2(int memTotal, int tiempoMin, int tiempoMax, int ajuste){
+
+    public Ventana2(int memTotal, int tiempoMin, int tiempoMax, int ajuste, LinkedList<Particion> part) {
         initComponents();
         this.memTotal = memTotal;
         this.tiempoMin = tiempoMin;
         this.tiempoMax = tiempoMax;
         this.ajuste = ajuste;
+        this.particiones = part;
+        this.particionMayor = this.obtenerParticionMayor();
+    }
+    
+    private void primerAjuste(){
+        for(Proceso proceso : listaProcesos){
+            for(Particion particion : particiones){
+                if(proceso.getMemoriaRequerida() <= particion.getTamanio() && !particion.getPanel().getEnUso()){
+                    float porcentaje = (float)(100/(particion.getTamanio() / proceso.getMemoriaRequerida()));
+                    particion.getPanel().setEnUso(true);
+                    particion.getPanel().setTexto(proceso.getNombre(), String.valueOf(particiones.indexOf(particion)+1), String.valueOf(particion.getTamanio()), String.valueOf(porcentaje)+"%");
+                    proceso.setEstado(1);
+                    model.setValueAt( "Ejecutando", proceso.getId() - 1, 4);
+                    //procesosEjecutando.add(listaProcesos.poll());
+                    break;
+                    
+                    
+                }
+            }
+        }
+    }
+    
+    private void iniciarTimerProcesos(){
+        for(Proceso proceso: listaProcesos){
+            Timer timer = new Timer(1000, new ProcesoTimerListener(proceso, model));
+            timer.start();
+            proceso.setTimer(timer);
+        }
+    }
+
+    private int obtenerParticionMayor() {
+        int mayor = 0;
+        for (Particion particion : this.particiones) {
+            if (particion.getTamanio() >= mayor) {
+                mayor = particion.getTamanio();
+            }
+        }
+        System.out.println("Particion mayor: " + mayor);
+        return mayor;
+    }
+
+    public void aniadirPaneles(LinkedList<Particion> particiones) {
+        contenedorParticiones.removeAll();
+        contenedorParticiones2.removeAll();
+
+        for (int i=0; i<particiones.size(); i++) {
+            PanelParticion panel = new PanelParticion();
+            panel.setTexto("", "", "", "");
+            panel.setEnUso(false);
+            if (i < 10) {
+                contenedorParticiones.add(panel);
+                contenedorParticiones.add(Box.createRigidArea(new Dimension(5, 10)));
+            } else {
+                contenedorParticiones2.add(panel);
+                contenedorParticiones2.add(Box.createRigidArea(new Dimension(5, 10)));
+            }
+            particiones.get(i).setPanel(panel);
+
+        }
+        contenedorParticiones.revalidate();
+        contenedorParticiones.repaint();
+        contenedorParticiones2.revalidate();
+        contenedorParticiones2.repaint();
     }
 
     /**
@@ -38,8 +117,12 @@ public class Ventana2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        btnNuevo = new javax.swing.JButton();
+        btnIniciar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaProcesos = new javax.swing.JTable();
+        contenedorParticiones = new javax.swing.JPanel();
+        contenedorParticiones2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -48,38 +131,114 @@ public class Ventana2 extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("jLabel1");
+        btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("jLabel2");
+        btnIniciar.setText("Iniciar Simulacion");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
+
+        tablaProcesos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tablaProcesos);
+
+        contenedorParticiones.setLayout(new javax.swing.BoxLayout(contenedorParticiones, javax.swing.BoxLayout.LINE_AXIS));
+
+        contenedorParticiones2.setLayout(new javax.swing.BoxLayout(contenedorParticiones2, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(109, 109, 109)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addContainerGap(257, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnIniciar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 905, Short.MAX_VALUE)
+                    .addComponent(contenedorParticiones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(contenedorParticiones2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jLabel1)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel2)
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNuevo)
+                    .addComponent(btnIniciar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(contenedorParticiones, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(contenedorParticiones2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-            // TODO add your handling code here:
-            jLabel1.setText(String.valueOf(this.memTotal));
+        // TODO add your handling code here:
+        model = new ModeloV2();
+        tablaProcesos.setModel(model);
+
+        model.addColumn(0);
+        aniadirPaneles(this.particiones);
+        this.listaProcesos = new LinkedList();
     }//GEN-LAST:event_formWindowOpened
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        Dialogo x = new Dialogo(this, true, this.particionMayor);
+        x.setVisible(true);
+
+        if (x.getRootPane() != null) {
+            Vector v = new Vector();
+            v.addElement(model.getRowCount() + 1);
+            v.addElement(x.txtNombre.getText());
+            v.addElement((int) (Math.random() * (this.tiempoMax - this.tiempoMin + 1) + this.tiempoMin));
+            v.addElement(x.txtCantidad.getText());
+            v.addElement(0);
+            v.addElement(Float.parseFloat("0.00"));          
+
+            model.addRow(v);
+            listaProcesos.add(new Proceso(Integer.parseInt(v.elementAt(0).toString()) , v.elementAt(1).toString(), Integer.parseInt(v.elementAt(2).toString() ), Integer.parseInt(v.elementAt(3).toString()) ));
+            
+            if(simIniciada){
+                Proceso proceso = listaProcesos.get(listaProcesos.size()-1);
+                Timer timer = new Timer(1000, new ProcesoTimerListener(proceso, model));
+                timer.start();
+                proceso.setTimer(timer);
+            }
+        }
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        procesosEjecutando = new LinkedList();
+        this.simIniciada = true;
+        iniciarTimerProcesos();
+        primerAjuste();
+    }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,7 +276,11 @@ public class Ventana2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnIniciar;
+    private javax.swing.JButton btnNuevo;
+    private javax.swing.JPanel contenedorParticiones;
+    private javax.swing.JPanel contenedorParticiones2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tablaProcesos;
     // End of variables declaration//GEN-END:variables
 }

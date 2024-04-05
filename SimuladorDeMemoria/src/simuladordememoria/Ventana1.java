@@ -10,6 +10,7 @@ package simuladordememoria;
  * @author LENOVO
  */
 import java.awt.Color;
+import java.util.LinkedList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
@@ -28,6 +29,7 @@ public class Ventana1 extends javax.swing.JFrame {
     int ajuste;
     int tiempoMin;
     int tiempoMax;
+    LinkedList<Particion> listaParticiones;
 
     
     private void calcularSumaParticiones() {
@@ -45,6 +47,7 @@ public class Ventana1 extends javax.swing.JFrame {
                 }
 
             }
+           
             editor.setSuma(suma);
             this.exceptionTabla.setForeground(Color.BLACK);
             this.exceptionTabla.setText("Suma actual: " + suma);
@@ -529,7 +532,8 @@ public class Ventana1 extends javax.swing.JFrame {
             if(!exTabla || !blancoTabla)
                 throw new Exception();
             
-            Ventana2 v2 = new Ventana2(Integer.parseInt(totalMem.getText()), ERROR, ERROR, ABORT);
+            this.listaParticiones = editor.obtenerLista();
+            Ventana2 v2 = new Ventana2(this.memTotal, this.tiempoMin, this.tiempoMax, this.ajuste, this.listaParticiones);
             v2.setVisible(true);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Revise los errores en el formulario", "Error", NORMAL);
