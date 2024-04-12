@@ -53,7 +53,10 @@ public class Ventana2 extends javax.swing.JFrame {
                 if(proceso.getMemoriaRequerida() <= particion.getTamanio() && !particion.getPanel().getEnUso()){
                     float porcentaje = (float)(100/(particion.getTamanio() / proceso.getMemoriaRequerida()));
                     particion.getPanel().setEnUso(true);
-                    particion.getPanel().setTexto(proceso.getNombre(), String.valueOf(particiones.indexOf(particion)+1), String.valueOf(particion.getTamanio()), String.valueOf(porcentaje)+"%");
+                    particion.getPanel().setTexto(proceso.getNombre(), 
+                            String.valueOf(particiones.indexOf(particion)+1), 
+                            String.valueOf(particion.getTamanio()), 
+                            String.valueOf(porcentaje)+"%");
                     proceso.setEstado(1);
                     model.setValueAt( "Ejecutando", proceso.getId() - 1, 4);
                     //procesosEjecutando.add(listaProcesos.poll());
@@ -92,7 +95,7 @@ public class Ventana2 extends javax.swing.JFrame {
             PanelParticion panel = new PanelParticion();
             panel.setTexto("", "", "", "");
             panel.setEnUso(false);
-            if (i < 10) {
+            if (i < particiones.size()/2) {
                 contenedorParticiones.add(panel);
                 contenedorParticiones.add(Box.createRigidArea(new Dimension(5, 10)));
             } else {

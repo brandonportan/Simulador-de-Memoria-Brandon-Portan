@@ -12,6 +12,7 @@ package simuladordememoria;
 public class Particion {
     private int tamanio;
     private PanelParticion panel;
+    private Proceso procesoAsignado;
     
     public Particion(int tamanio){
         this.tamanio = tamanio;
@@ -32,5 +33,13 @@ public class Particion {
     
     public PanelParticion getPanel(){
         return this.panel;
+    }
+    
+    public Proceso getProcesoAsignado(){
+        return this.procesoAsignado;
+    }
+    
+    public void setProcesoAsignado(Proceso procesoAsignado){
+        this.procesoAsignado = procesoAsignado;
     }
 }
