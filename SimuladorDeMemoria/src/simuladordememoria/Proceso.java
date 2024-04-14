@@ -19,7 +19,8 @@ public class Proceso {
     private int estado;
     private int tiempoTranscurrido; 
     private Particion mejorParticion;
-    private Timer timer;
+    private int tiempoEjecutando;
+
     
     public Proceso(int id, String nombre, int duracion, int memoriaRequerida) {
         this.id = id;
@@ -62,13 +63,6 @@ public class Proceso {
         this.tiempoTranscurrido = tiempoTranscurrido;
     }
 
-    public Timer getTimer() {
-        return timer;
-    }
-
-    public void setTimer(Timer timer) {
-        this.timer = timer;
-    }
     
     public Particion getMejorPartcion(){
         return this.mejorParticion;
@@ -78,7 +72,13 @@ public class Proceso {
         this.mejorParticion = mejorParticion;
     }
     
+    public int getTiempoEjecutando(){
+        return this.tiempoEjecutando;
+    }
+    
     public void actualizarTiempoTranscurrido(){
         this.tiempoTranscurrido++;
+        if(this.estado == 1)
+            this.tiempoEjecutando++;
     }
 }

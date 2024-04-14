@@ -29,7 +29,8 @@ public class Hilo extends Thread{
     }
     
     public void run(){
-        
+        Timer timerHilo = new Timer(1000, new HiloTimerListener(this));
+        timerHilo.start();
     }
 
     

@@ -27,6 +27,7 @@ public class Ventana2 extends javax.swing.JFrame {
     public LinkedList<Proceso> listaProcesos;
     public LinkedList<Proceso> procesosEjecutando;
     public boolean simIniciada;
+    public Hilo hiloAjustes;
 
     ModeloV2 model;
 
@@ -47,7 +48,7 @@ public class Ventana2 extends javax.swing.JFrame {
         this.particionMayor = this.obtenerParticionMayor();
     }
     
-    private void primerAjuste(){
+   /* private void primerAjuste(){
         for(Proceso proceso : listaProcesos){
             for(Particion particion : particiones){
                 if(proceso.getMemoriaRequerida() <= particion.getTamanio() && !particion.getPanel().getEnUso()){
@@ -66,16 +67,33 @@ public class Ventana2 extends javax.swing.JFrame {
                 }
             }
         }
-    }
+    }*/
     
-    private void iniciarTimerProcesos(){
+ /*   private void iniciarTimerProcesos(){
         for(Proceso proceso: listaProcesos){
             Timer timer = new Timer(1000, new ProcesoTimerListener(proceso, model));
             timer.start();
             proceso.setTimer(timer);
         }
-    }
+    }*/
 
+  /*  private void agregarProcesoAMejorCola(Proceso proceso){
+        Particion mejorParticion = new Particion(0);
+        int mejorValor = Integer.MAX_VALUE;
+        for(Particion particion : this.particiones){
+            int tamanioProceso = proceso.getMemoriaRequerida();
+            int tamanioParticion = particion.getTamanio();
+            int valor = tamanioParticion - tamanioProceso;
+            
+            if(valor < mejorValor && valor >=0){
+                mejorParticion = particion;
+                mejorValor = valor;
+            }                     
+        }
+        mejorParticion.getProcesosEnCola().add(proceso);
+        System.out.println("Mejor Particion: " + mejorParticion.getTamanio() + " Cola: " + mejorParticion.getProcesosEnCola());
+    }*/
+    
     private int obtenerParticionMayor() {
         int mayor = 0;
         for (Particion particion : this.particiones) {
@@ -209,6 +227,8 @@ public class Ventana2 extends javax.swing.JFrame {
         model.addColumn(0);
         aniadirPaneles(this.particiones);
         this.listaProcesos = new LinkedList();
+    
+        hiloAjustes = new Hilo(listaProcesos, particiones, ajuste, model);
     }//GEN-LAST:event_formWindowOpened
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -227,20 +247,21 @@ public class Ventana2 extends javax.swing.JFrame {
             model.addRow(v);
             listaProcesos.add(new Proceso(Integer.parseInt(v.elementAt(0).toString()) , v.elementAt(1).toString(), Integer.parseInt(v.elementAt(2).toString() ), Integer.parseInt(v.elementAt(3).toString()) ));
             
+            
             if(simIniciada){
-                Proceso proceso = listaProcesos.get(listaProcesos.size()-1);
-                Timer timer = new Timer(1000, new ProcesoTimerListener(proceso, model));
-                timer.start();
-                proceso.setTimer(timer);
+                listaProcesos.getLast().setEstado(2);
+                model.setValueAt("En espera", listaProcesos.getLast().getId() - 1, 4);
+               // hiloAjustes.addProceso(listaProcesos.getLast());
             }
         }
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        procesosEjecutando = new LinkedList();
+        
         this.simIniciada = true;
-        iniciarTimerProcesos();
-        primerAjuste();
+        hiloAjustes.start();
+        //iniciarTimerProcesos();
+       // primerAjuste();
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**

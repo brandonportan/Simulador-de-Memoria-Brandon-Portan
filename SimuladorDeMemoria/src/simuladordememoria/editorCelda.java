@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class IntegerCellEditor extends DefaultCellEditor {
+public class editorCelda extends DefaultCellEditor {
 
     public int suma;
     public boolean hayExcepcion;
@@ -25,7 +25,7 @@ public class IntegerCellEditor extends DefaultCellEditor {
     private JLabel errorLabel;
     private int valorAnterior = 0;
 
-    public IntegerCellEditor(JLabel errorLabel, DefaultTableModel model) {
+    public editorCelda(JLabel errorLabel, DefaultTableModel model) {
         super(new JTextField());
         this.errorLabel = errorLabel;
         this.suma = 0;

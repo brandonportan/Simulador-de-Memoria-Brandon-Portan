@@ -23,7 +23,7 @@ public class Ventana1 extends javax.swing.JFrame {
     DefaultTableModel modelo;
     DefaultTableCellRenderer alinear;
     TableModelListener listener;
-    IntegerCellEditor editor;
+    editorCelda editor;
     int memTotal;
     int particiones;
     int ajuste;
@@ -459,7 +459,7 @@ public class Ventana1 extends javax.swing.JFrame {
 
         };
   
-        editor = new IntegerCellEditor(exceptionTabla, modelo);
+        editor = new editorCelda(exceptionTabla, modelo);
         editor.setClickCountToStart(1);
 
         alinear = new DefaultTableCellRenderer();

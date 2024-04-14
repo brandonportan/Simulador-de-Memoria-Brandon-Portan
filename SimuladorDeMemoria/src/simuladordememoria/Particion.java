@@ -5,6 +5,8 @@
  */
 package simuladordememoria;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author LENOVO
@@ -13,10 +15,11 @@ public class Particion {
     private int tamanio;
     private PanelParticion panel;
     private Proceso procesoAsignado;
+    private LinkedList<Proceso> procesosEnCola;
     
     public Particion(int tamanio){
         this.tamanio = tamanio;
-
+        this.procesosEnCola = new LinkedList();
     }
     
     public void setTamanio(int tamanio){
@@ -41,5 +44,9 @@ public class Particion {
     
     public void setProcesoAsignado(Proceso procesoAsignado){
         this.procesoAsignado = procesoAsignado;
+    }
+    
+    public LinkedList<Proceso> getProcesosEnCola(){
+        return this.procesosEnCola;
     }
 }
