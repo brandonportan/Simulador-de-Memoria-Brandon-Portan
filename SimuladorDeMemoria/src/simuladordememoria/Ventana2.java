@@ -111,7 +111,7 @@ public class Ventana2 extends javax.swing.JFrame {
 
         for (int i=0; i<particiones.size(); i++) {
             PanelParticion panel = new PanelParticion();
-            panel.setTexto("", "", "", "");
+            panel.setTexto("", "", "", "", "");
             panel.setEnUso(false);
             if (i < particiones.size()/2) {
                 contenedorParticiones.add(panel);

@@ -214,7 +214,7 @@ public class HiloTimerListener implements ActionListener {
     }
 
     private void ingresarProceso(Proceso proceso, Particion particion) {
-        float porcentaje = (float) (100 / (particion.getTamanio() / proceso.getMemoriaRequerida()));
+        float porcentaje = 100.0F * proceso.getMemoriaRequerida()/ particion.getTamanio();
         particion.getPanel().setEnUso(true);
         particion.setProcesoAsignado(proceso);
         proceso.setMejorParticion(particion);
@@ -222,7 +222,8 @@ public class HiloTimerListener implements ActionListener {
         particion.getPanel().setTexto(proceso.getNombre(),
                 String.valueOf(this.hiloPrincipal.getListaParticiones().indexOf(particion) + 1),
                 String.valueOf(particion.getTamanio()),
-                String.valueOf(porcentaje) + "%");
+                String.valueOf(porcentaje) + "%",
+                String.valueOf(proceso.getMemoriaRequerida()));
 
         proceso.setEstado(1);
         this.hiloPrincipal.getModelo().setValueAt("Ejecutando", proceso.getId() - 1, 4);
@@ -244,7 +245,7 @@ public class HiloTimerListener implements ActionListener {
     private void expulsarProceso(Proceso proceso) {
         proceso.getMejorPartcion().getPanel().setEnUso(false);
 
-        proceso.getMejorPartcion().getPanel().setTexto("", "", "", "");
+        proceso.getMejorPartcion().getPanel().setTexto("", "", "", "", "");
 
         proceso.setEstado(3);
         this.hiloPrincipal.getModelo().setValueAt("Terminado", proceso.getId() - 1, 4);

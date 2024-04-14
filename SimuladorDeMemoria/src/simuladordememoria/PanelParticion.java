@@ -8,6 +8,7 @@ package simuladordememoria;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
@@ -20,6 +21,7 @@ public class PanelParticion extends JPanel{
     private String numeroParticion;
     private String tamanio;
     private String porcentajeUso;
+    private String tamanioProceso;
     private boolean enUso=false;
     
     public PanelParticion() {
@@ -36,11 +38,12 @@ public class PanelParticion extends JPanel{
          return this.enUso;
      }
      
-     public void setTexto(String proceso, String numeroParticion, String tamanio, String porcentajeUso) {
+     public void setTexto(String proceso, String numeroParticion, String tamanio, String porcentajeUso, String tamanioProceso) {
         this.proceso = proceso;
         this.numeroParticion = numeroParticion;
         this.tamanio = tamanio;
         this.porcentajeUso = porcentajeUso;
+        this.tamanioProceso = tamanioProceso;
         this.repaint();
     }
      @Override
@@ -51,11 +54,14 @@ public class PanelParticion extends JPanel{
         } else {
             this.setBackground(Color.GREEN);
         }
+        g.setFont(new Font("Arial", Font.BOLD, 11));
+        
         g.setColor(Color.BLACK);
-        g.drawString(this.proceso, 10, 20);
-        g.drawString(this.numeroParticion, 10, 30);
-        g.drawString(this.tamanio, 10, 40);
-        g.drawString(this.porcentajeUso, 10, 50);
+        g.drawString(this.proceso, 10, 30);
+        g.drawString(this.numeroParticion, 10, 50);
+        g.drawString("TPart: "+this.tamanio, 10, 70);
+        g.drawString("TPro: "+ this.tamanioProceso, 10, 90);
+        g.drawString(this.porcentajeUso, 10, 110);
         
     }
 }
