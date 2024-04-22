@@ -137,12 +137,6 @@ public class editorCelda extends DefaultCellEditor {
                 return false;
             }
             
-            /*if((this.suma + valor)> this.totalMemoria){
-                System.out.println("Suma vealuada: " + (this.suma+valor));
-                this.errorLabel.setText("La suma sobrepasa a la memoria total: suma = "+this.suma);
-                return false;
-            }*/
-            
             this.errorLabel.setText("");
             return true;
     }
@@ -178,12 +172,4 @@ public class editorCelda extends DefaultCellEditor {
    }
   
     
-    /*  if (valor < 0) {
-                this.hayExcepcion = true;
-                throw new Exception("El valor no puede ser negativo");
-            }
-            if (valor < 1 && this.textField.getText().trim().length() != 0) {
-                this.hayExcepcion = true;
-                throw new Exception("El valor debe ser mayor o igual a 1");
-            }*/
 }

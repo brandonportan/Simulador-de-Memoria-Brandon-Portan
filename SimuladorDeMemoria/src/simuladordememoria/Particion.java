@@ -8,19 +8,22 @@ package simuladordememoria;
 import java.util.LinkedList;
 
 /**
- *
+ * Clase que representa una Particion en la cual se pueden agregar los procesos
  * @author LENOVO
  */
 public class Particion {
     private int tamanio;
     private PanelParticion panel;
     private Proceso procesoAsignado;
-    private LinkedList<Proceso> procesosEnCola;
+
     
     public Particion(int tamanio){
         this.tamanio = tamanio;
-        this.procesosEnCola = new LinkedList();
+
     }
+    
+    
+    // Setters y Getters
     
     public void setTamanio(int tamanio){
         this.tamanio = tamanio;
@@ -46,7 +49,5 @@ public class Particion {
         this.procesoAsignado = procesoAsignado;
     }
     
-    public LinkedList<Proceso> getProcesosEnCola(){
-        return this.procesosEnCola;
-    }
+
 }

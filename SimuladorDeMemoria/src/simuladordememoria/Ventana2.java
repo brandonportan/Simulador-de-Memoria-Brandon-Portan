@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 import javax.swing.Box;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -48,52 +50,6 @@ public class Ventana2 extends javax.swing.JFrame {
         this.particionMayor = this.obtenerParticionMayor();
     }
     
-   /* private void primerAjuste(){
-        for(Proceso proceso : listaProcesos){
-            for(Particion particion : particiones){
-                if(proceso.getMemoriaRequerida() <= particion.getTamanio() && !particion.getPanel().getEnUso()){
-                    float porcentaje = (float)(100/(particion.getTamanio() / proceso.getMemoriaRequerida()));
-                    particion.getPanel().setEnUso(true);
-                    particion.getPanel().setTexto(proceso.getNombre(), 
-                            String.valueOf(particiones.indexOf(particion)+1), 
-                            String.valueOf(particion.getTamanio()), 
-                            String.valueOf(porcentaje)+"%");
-                    proceso.setEstado(1);
-                    model.setValueAt( "Ejecutando", proceso.getId() - 1, 4);
-                    //procesosEjecutando.add(listaProcesos.poll());
-                    break;
-                    
-                    
-                }
-            }
-        }
-    }*/
-    
- /*   private void iniciarTimerProcesos(){
-        for(Proceso proceso: listaProcesos){
-            Timer timer = new Timer(1000, new ProcesoTimerListener(proceso, model));
-            timer.start();
-            proceso.setTimer(timer);
-        }
-    }*/
-
-  /*  private void agregarProcesoAMejorCola(Proceso proceso){
-        Particion mejorParticion = new Particion(0);
-        int mejorValor = Integer.MAX_VALUE;
-        for(Particion particion : this.particiones){
-            int tamanioProceso = proceso.getMemoriaRequerida();
-            int tamanioParticion = particion.getTamanio();
-            int valor = tamanioParticion - tamanioProceso;
-            
-            if(valor < mejorValor && valor >=0){
-                mejorParticion = particion;
-                mejorValor = valor;
-            }                     
-        }
-        mejorParticion.getProcesosEnCola().add(proceso);
-        System.out.println("Mejor Particion: " + mejorParticion.getTamanio() + " Cola: " + mejorParticion.getProcesosEnCola());
-    }*/
-    
     private int obtenerParticionMayor() {
         int mayor = 0;
         for (Particion particion : this.particiones) {
@@ -128,6 +84,8 @@ public class Ventana2 extends javax.swing.JFrame {
         contenedorParticiones2.revalidate();
         contenedorParticiones2.repaint();
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -197,7 +155,7 @@ public class Ventana2 extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 905, Short.MAX_VALUE)
                     .addComponent(contenedorParticiones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(contenedorParticiones2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +170,7 @@ public class Ventana2 extends javax.swing.JFrame {
                 .addComponent(contenedorParticiones, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addComponent(contenedorParticiones2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -227,6 +185,7 @@ public class Ventana2 extends javax.swing.JFrame {
         model.addColumn(0);
         aniadirPaneles(this.particiones);
         this.listaProcesos = new LinkedList();
+
     
         hiloAjustes = new Hilo(listaProcesos, particiones, ajuste, model);
     }//GEN-LAST:event_formWindowOpened
@@ -257,7 +216,10 @@ public class Ventana2 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-        
+        if(this.simIniciada){
+            JOptionPane.showMessageDialog(this, "La simulacion ya ha sido iniciada", "NOOOO", HEIGHT);
+            return;
+        }
         this.simIniciada = true;
         hiloAjustes.start();
         //iniciarTimerProcesos();

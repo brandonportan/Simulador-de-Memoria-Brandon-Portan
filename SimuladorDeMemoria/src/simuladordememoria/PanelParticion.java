@@ -13,7 +13,8 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- *
+ * Clase que se encarga de manejar los paneles.
+ * Esto maneja la interfaz grafica que representan las particiones donde se ingresan los procesos
  * @author LENOVO
  */
 public class PanelParticion extends JPanel{
@@ -38,6 +39,14 @@ public class PanelParticion extends JPanel{
          return this.enUso;
      }
      
+     /**
+      * Este metodo se encarga de alistar los valores del texto en el panel de la intefaz grafica
+      * @param proceso
+      * @param numeroParticion
+      * @param tamanio
+      * @param porcentajeUso
+      * @param tamanioProceso 
+      */
      public void setTexto(String proceso, String numeroParticion, String tamanio, String porcentajeUso, String tamanioProceso) {
         this.proceso = proceso;
         this.numeroParticion = numeroParticion;
@@ -46,6 +55,11 @@ public class PanelParticion extends JPanel{
         this.tamanioProceso = tamanioProceso;
         this.repaint();
     }
+     
+     /**
+      * Hace el cambio tanto de los colores como del texto en la interfaz grafica
+      * @param g 
+      */
      @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

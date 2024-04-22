@@ -8,7 +8,7 @@ package simuladordememoria;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Clase que crea un Modelo para la tabla de procesos creada en Ventana2
  * @author LENOVO
  */
 public class ModeloV2 extends DefaultTableModel{

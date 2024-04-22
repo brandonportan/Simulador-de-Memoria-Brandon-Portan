@@ -11,7 +11,8 @@ import java.util.LinkedList;
 import javax.swing.Timer;
 
 /**
- *
+ * Se crea el hilo que supervisa la expulsion y el ingreso de procesos.
+ * Hace uso de un objeto Timer cuyo evento Action Performed contiene la logica de los ajustes.
  * @author LENOVO
  */
 public class Hilo extends Thread{
@@ -28,14 +29,17 @@ public class Hilo extends Thread{
         this.model = model;
     }
     
+    /**
+     * La eeucion del hilo crea un objeto TImer que contiene la logica de expulsion
+     */
     public void run(){
-        Timer timerHilo = new Timer(1000, new HiloTimerListener(this));
-        timerHilo.start();
+        this.timerGlobal = new Timer(1000, new HiloTimerListener(this));
+        this.timerGlobal.start();
     }
 
     
     
-    
+    // Setters y Getters
     public void addProceso(Proceso proceso){
         this.listaProcesos.add(proceso);
     }

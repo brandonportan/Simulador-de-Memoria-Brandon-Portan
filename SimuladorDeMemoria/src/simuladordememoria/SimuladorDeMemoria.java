@@ -6,14 +6,12 @@
 package simuladordememoria;
 
 /**
- *
+ * Metodo principal que ejecuta el programa
  * @author LENOVO
  */
 public class SimuladorDeMemoria {
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String[] args) {
         Ventana1 v = new Ventana1();
         v.setVisible(true);

@@ -8,7 +8,7 @@ package simuladordememoria;
 import javax.swing.Timer;
 
 /**
- *
+ * Clase que representa un Proceso
  * @author LENOVO
  */
 public class Proceso {
@@ -30,7 +30,7 @@ public class Proceso {
         this.estado = 0;
         this.tiempoTranscurrido = 0;
     }
-    
+    // Setters y Getters
     public int getId() {
         return id;
     }
